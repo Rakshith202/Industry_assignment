@@ -31,17 +31,18 @@ void sort_machines_by_cycle_time(struct plant* current_plant)
 
 	int swapped;
 	struct machine* current_machine;
+	struct machine* next_machine;
+	struct machine* first_machine = current_plant->mlink;
 
-	do 
+	while (1) 
 	{
 		swapped = 0;
 		current_machine = current_plant->mlink;
 
-		struct machine* first_machine = current_machine;
 
-		do 
+		while (1) 
 		{
-			struct machine* next_machine = current_machine->mlink; // Get the next machine
+			next_machine = current_machine->mlink;
 
 			if (next_machine == first_machine) 
 			{
@@ -51,16 +52,26 @@ void sort_machines_by_cycle_time(struct plant* current_plant)
 			if (current_machine->cycle_time > next_machine->cycle_time) 
 			{
 				swap_machines(current_machine, next_machine);
-				swapped = 1; 
+				swapped = 1;
 			}
 
-			current_machine = next_machine; 
-		} 
-		while (current_machine != first_machine); 
-	} 
-	while (swapped); 
+			current_machine = next_machine;
+
+			if (current_machine == first_machine) 
+			{
+				break; 
+			}
+		}
+
+
+		if (!swapped) 
+		{
+			break;
+		}
+	}
 
 	printf("Machines sorted by cycle time successfully.\n");
+	printf("----------------------------------------------------\n");
 }
 
 struct plant* sort_machines(struct plant* start) 
@@ -68,6 +79,7 @@ struct plant* sort_machines(struct plant* start)
 	if (start == NULL) 
 	{
 		printf("Please create plants and machines before sorting.\n");
+		printf("----------------------------------------------------\n");
 		return start;
 	}
 
@@ -76,11 +88,11 @@ struct plant* sort_machines(struct plant* start)
 
 	if (current_plant == NULL) 
 	{
-		printf("Plant with ID %d not found. Sorting aborted.\n", plant_id);
+		printf("Plant with ID %d not found. Sorting not donw.\n", plant_id);
+		printf("----------------------------------------------------\n");
 		return start;
 	}
 
 	sort_machines_by_cycle_time(current_plant);
 	return start;
 }
-

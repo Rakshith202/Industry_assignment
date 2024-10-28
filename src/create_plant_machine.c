@@ -1,5 +1,7 @@
 #include "main.h"
 
+int plants_created = 0;  
+
 int plant_id_exists(struct plant* start, int plant_id) 
 {
 	struct plant* current = start;
@@ -77,9 +79,22 @@ void update_machine(struct plant* current_plant, struct machine* new_machine)
 	}
 }
 
+
 struct plant* create_plants_machines(struct plant* start) 
 {
-	int num_plants = validate_int_input("Enter the number of plants to create: ");
+	if (plants_created && start != NULL) 
+	{
+		printf("Plants and machines created already. Please use the Add Plant or Machine option.\n");
+		printf("------------------------------------------------------------------------------------\n");
+		return start;
+	}
+
+	int num_plants = validate_int_input("Enter the number of plants to create (1–100): ");
+	while (num_plants < 1 || num_plants > 100) 
+	{
+		printf("Invalid number of plants. Please enter a value between 1 and 100.\n");
+		num_plants = validate_int_input("Enter the number of plants to create (1–100): ");
+	}
 
 	for (int i = 0; i < num_plants; i++) 
 	{
@@ -87,68 +102,50 @@ struct plant* create_plants_machines(struct plant* start)
 
 		printf("_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*\n");
 
-		int plant_id = validate_int_input("Enter Plant ID: ");
-		while (plant_id_exists(start, plant_id)) 
+		int plant_id = validate_int_input("Enter Plant ID (1–100): ");
+		while (plant_id < 1 || plant_id > 100 || plant_id_exists(start, plant_id)) 
 		{
-			printf("Plant ID used.\n");
-			plant_id = validate_int_input("Enter Plant ID: ");
+			printf("Invalid or used Plant ID. Please enter a value between 1 and 100.\n");
+			plant_id = validate_int_input("Enter Plant ID (1–100): ");
 		}
 		new_plant->plant_id = plant_id;
 
-		printf("Enter Plant Name: ");
+		printf("Enter Plant Name (alphabets): ");
 		scanf("%s", new_plant->plant_name);
+		while (!validate_plant_name(new_plant->plant_name)) 
+		{
+			printf("Invalid plant name.Use alphabets only.\n");
+			printf("Enter Plant Name: ");
+			scanf("%s", new_plant->plant_name);
+		}
 
 		start = update_plant(start, new_plant);
 
-		int num_machines = validate_int_input("\nEnter the number of machines for this plant: ");
+		int num_machines = validate_int_input("\nEnter the number of machines for this plant (0–1000): ");
+		while (num_machines < 0 || num_machines > 1000) 
+		{
+			printf("Invalid number of machines. Please enter a value between 0 and 1000.\n");
+			num_machines = validate_int_input("\nEnter the number of machines for this plant (0–1000): ");
+		}
 
 		for (int j = 0; j < num_machines; j++) 
 		{
 			struct machine* new_machine = allocate_machine();
 
-			int machine_id = validate_int_input("Enter Machine ID: ");
-			while (machine_id_exists(new_plant, machine_id)) 
+			int machine_id = validate_int_input("Enter Machine ID (1–1000): ");
+			while (machine_id < 1 || machine_id > 1000 || machine_id_exists(new_plant, machine_id)) 
 			{
-				printf("Machine ID used.\n ");
-				machine_id = validate_int_input("Enter Machine ID: ");
+				printf("Invalid or used Machine ID. Please enter a value between 1 and 1000.\n");
+				machine_id = validate_int_input("Enter Machine ID (1–1000): ");
 			}
 			new_machine->machine_id = machine_id;
-
-			while (1) 
-			{
-				new_machine->start_time = validate_float_input("Enter Machine Start Time in 24hr clk (hh.mm): ");
-				if (validate_time_format(new_machine->start_time)) 
-				{
-					break; 
-				} 
-				else 
-				{
-					printf("Invalid time format. Please re-enter the start time.\n");
-				}
-			}
-
-
-			while (1) 
-			{
-				new_machine->stop_time = validate_float_input("Enter Machine Stop Time in 24hr clk (hh.mm): ");
-				if (validate_time_format(new_machine->stop_time)) 
-				{
-					break; 
-				} 
-				else 
-				{
-					printf("Invalid time format. Please re-enter the stop time.\n");
-				}
-			}
-
-			cycle_time_calculation(new_machine);
-			new_machine->machine_production = 1;
 
 			update_machine(new_plant, new_machine);
 		}
 	}
 
+	plants_created = 1;  
 	printf("Successfully created %d plants and their respective machines.\n", num_plants);
+	printf("---------------------------------------------------------------------------\n");
 	return start;
 }
-

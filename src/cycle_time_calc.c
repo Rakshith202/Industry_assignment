@@ -1,16 +1,24 @@
 #include "main.h"
 
-
-void cycle_time_calculation(struct machine *m) 
+void cycle_time_calculation(struct machine* machine)
 {
-	if (m->stop_time >= m->start_time) 
-	{
-		m->cycle_time = m->stop_time - m->start_time;
-	} 
+	float start_time = machine->start_time;
+	float stop_time = machine->stop_time;
 
+	if (start_time == stop_time) 
+	{
+		machine->cycle_time = 24.0;  
+	} 
+	else if (stop_time > start_time) 
+	{
+		machine->cycle_time = stop_time - start_time;
+	} 
 	else 
 	{
-		m->cycle_time = (24.00 - m->start_time) + m->stop_time;
+		machine->cycle_time = (24.0 - start_time) + stop_time;
 	}
-}
 
+
+	int full_hours = (int)(machine->cycle_time);  
+	machine->machine_production += full_hours;  
+}

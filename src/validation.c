@@ -1,6 +1,5 @@
 #include "main.h"
-#include <ctype.h>
-#include <math.h>
+
 
 int valid_integer(const char* str) 
 {
@@ -103,4 +102,23 @@ int validate_time_format(float time)
 	}
 
 	return 1;
+}
+
+int validate_plant_name(const char* name)
+{
+	for (int i = 0; name[i] != '\0'; i++) 
+	{
+		if (!isalpha(name[i])) 
+		{
+			return 0;
+		}
+	}
+	return 1;
+}
+
+void display_time_in_hours_and_minutes(float total_cycle_time) 
+{
+	int hours = (int)total_cycle_time;
+	int minutes = (total_cycle_time - hours) * 60;  
+	//printf("Total Cycle Time: %d hours and %d minutes\n", hours, minutes);
 }

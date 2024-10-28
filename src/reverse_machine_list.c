@@ -5,6 +5,7 @@ struct plant* reverse_machines(struct plant* start)
 	if (start == NULL) 
 	{
 		printf("No plants available to reverse machines.\n");
+		printf("----------------------------------------------------\n");
 		return start;
 	}
 
@@ -14,7 +15,8 @@ struct plant* reverse_machines(struct plant* start)
 	if (current_plant == NULL) 
 	{
 
-		printf("Plant with ID %d not found. Reversal aborted.\n", plant_id);
+		printf("Plant with ID %d not found. Reversal not done.\n", plant_id);
+		printf("----------------------------------------------------\n");
 		return start;
 	}
 
@@ -22,7 +24,8 @@ struct plant* reverse_machines(struct plant* start)
 
 	if (current_machine == NULL || current_machine->mlink == current_machine) 
 	{
-		printf("REVErse Not rquied\n");
+		printf("Reverse Not Necessary\n");
+		printf("----------------------------------------------------\n");
 		return start; 
 	}
 
@@ -43,6 +46,7 @@ struct plant* reverse_machines(struct plant* start)
 	current_plant->mlink = prev;  
 
 	printf("Machines reversed successfully for Plant ID %d.\n", plant_id);
+	printf("----------------------------------------------------\n");
 	return start;
 }
 
